@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CogniTranslate - The soul of translation.</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for a nice font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="main-container w-full max-w-2xl p-6 md:p-10">
+
+        <!-- Header Section -->
+        <div class="text-center mb-8 header-anim">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">
+                <span class="text-teal-700">Cogni</span><span class="text-gray-500">Translate</span>
+            </h1>
+            <p class="text-gray-700 mt-2">The soul of translation.</p>
+        </div>
+
+        <!-- Form Section -->
+        <form id="translator-form" method="POST" class="space-y-6">
+            <!-- Input Text Area -->
+            <div class="form-el-1-anim">
+                <label for="text_to_translate" class="block text-sm font-medium text-gray-700 mb-2">Text to Translate</label>
+                <textarea name="text_to_translate" id="text_to_translate" rows="5" required class="w-full p-3 border rounded-lg focus:outline-none transition-all duration-300">{{ original_text or '' }}</textarea>
+            </div>
+
+            <!-- Language Selector -->
+            <div class="form-el-2-anim">
+                <label for="target_language" class="block text-sm font-medium text-gray-700 mb-2">Translate to</label>
+                <select name="target_language" id="target_language" class="w-full p-3 border bg-white rounded-lg focus:outline-none transition-all duration-300">
+                    <option value="Spanish" {% if selected_language == 'Spanish' %}selected{% endif %}>Spanish</option>
+                    <option value="French" {% if selected_language == 'French' %}selected{% endif %}>French</option>
+                    <option value="German" {% if selected_language == 'German' %}selected{% endif %}>German</option>
+                    <option value="Japanese" {% if selected_language == 'Japanese' %}selected{% endif %}>Japanese</option>
+                    <option value="Hindi" {% if selected_language == 'Hindi' %}selected{% endif %}>Hindi</option>
+                    <option value="Chinese (Simplified)" {% if selected_language == 'Chinese (Simplified)' %}selected{% endif %}>Chinese (Simplified)</option>
+                    <option value="Arabic" {% if selected_language == 'Arabic' %}selected{% endif %}>Arabic</option>
+                    <option value="Russian" {% if selected_language == 'Russian' %}selected{% endif %}>Russian</option>
+                </select>
+            </div>
+
+            <!-- Translate Button -->
+            <button type="submit" id="translate-btn" class="btn-primary w-full flex items-center justify-center text-white font-semibold py-3 px-4 rounded-lg shadow-md form-el-3-anim">
+                <span id="btn-text">Translate</span>
+                <div id="loader" class="loader hidden ml-3"></div>
+            </button>
+        </form>
+
+        <!-- Result Section -->
+        <div id="result-container" class="mt-8 result-anim {% if not translation %}hidden{% endif %}">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">Translation:</h3>
+            <div id="result-box" class="bg-gray-50/70 p-4 border border-gray-200 rounded-lg text-gray-700 whitespace-pre-wrap">
+                {{ translation or '' }}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to handle the loading state
+        const form = document.getElementById('translator-form');
+        const translateBtn = document.getElementById('translate-btn');
+        const btnText = document.getElementById('btn-text');
+        const loader = document.getElementById('loader');
+
+        form.addEventListener('submit', function() {
+            // Show loader and disable button on form submission
+            btnText.textContent = 'Translating...';
+            loader.classList.remove('hidden');
+            translateBtn.disabled = true;
+            translateBtn.classList.add('opacity-75', 'cursor-not-allowed');
+        });
+    </script>
+
+</body>
+</html>
