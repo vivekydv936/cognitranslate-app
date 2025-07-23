@@ -4,7 +4,9 @@ CogniTranslate is a modern, web-based translation service powered by Google's Ge
 
 Live Demo: https://cognitranslate-app.vercel.app/
 
+<img width="1441" height="1418" alt="Image" src="https://github.com/user-attachments/assets/3e82c373-48e7-4031-84a7-9237f5ec852a" />
 
+<img width="1196" height="1642" alt="Image" src="https://github.com/user-attachments/assets/233de6ec-9335-4803-b9d1-639f897dd2a3" />
 
 ✨ Features
 AI-Powered Translations: Leverages the Gemini 1.5 Flash model for high-quality, nuanced translations.
