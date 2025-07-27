@@ -5,15 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CogniTranslate - The soul of translation.</title>
     
-    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts for a nice font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Link to your external CSS file -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
@@ -31,36 +28,36 @@
 
         <!-- Form Section -->
         <form id="translator-form" method="POST" class="space-y-6">
-            <!-- Input Text Area -->
-            <div class="form-el-1-anim">
-                <label for="text_to_translate" class="block text-sm font-medium text-gray-700 mb-2">Text to Translate</label>
-                <textarea name="text_to_translate" id="text_to_translate" rows="5" required class="w-full p-3 border rounded-lg focus:outline-none transition-all duration-300">{{ original_text or '' }}</textarea>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 form-el-1-anim">
+                <div>
+                    <label for="source_language" class="block text-sm font-medium text-gray-700 mb-2">From</label>
+                    <select name="source_language" id="source_language" class="w-full p-3 border bg-white rounded-lg focus:outline-none transition-all duration-300">
+                        <option value="Detect Language" {% if selected_source_language == 'Detect Language' %}selected{% endif %}>Detect Language</option>
+                        {% for lang in languages %}<option value="{{ lang }}" {% if selected_source_language == lang %}selected{% endif %}>{{ lang }}</option>{% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="target_language" class="block text-sm font-medium text-gray-700 mb-2">To</label>
+                    <select name="target_language" id="target_language" class="w-full p-3 border bg-white rounded-lg focus:outline-none transition-all duration-300">
+                        {% for lang in languages %}<option value="{{ lang }}" {% if selected_target_language == lang %}selected{% endif %}>{{ lang }}</option>{% endfor %}
+                    </select>
+                </div>
             </div>
-
-            <!-- Language Selector -->
-            <div class="form-el-2-anim">
-                <label for="target_language" class="block text-sm font-medium text-gray-700 mb-2">Translate to</label>
-                <select name="target_language" id="target_language" class="w-full p-3 border bg-white rounded-lg focus:outline-none transition-all duration-300">
-                    <!-- Expanded and Alphabetized Language List -->
-                    <option value="Arabic" {% if selected_language == 'Arabic' %}selected{% endif %}>Arabic</option>
-                    <option value="Bengali" {% if selected_language == 'Bengali' %}selected{% endif %}>Bengali</option>
-                    <option value="Chinese (Simplified)" {% if selected_language == 'Chinese (Simplified)' %}selected{% endif %}>Chinese (Simplified)</option>
-                    <option value="Dutch" {% if selected_language == 'Dutch' %}selected{% endif %}>Dutch</option>
-                    <option value="French" {% if selected_language == 'French' %}selected{% endif %}>French</option>
-                    <option value="German" {% if selected_language == 'German' %}selected{% endif %}>German</option>
-                    <option value="Hindi" {% if selected_language == 'Hindi' %}selected{% endif %}>Hindi</option>
-                    <option value="Indonesian" {% if selected_language == 'Indonesian' %}selected{% endif %}>Indonesian</option>
-                    <option value="Italian" {% if selected_language == 'Italian' %}selected{% endif %}>Italian</option>
-                    <option value="Japanese" {% if selected_language == 'Japanese' %}selected{% endif %}>Japanese</option>
-                    <option value="Korean" {% if selected_language == 'Korean' %}selected{% endif %}>Korean</option>
-                    <option value="Polish" {% if selected_language == 'Polish' %}selected{% endif %}>Polish</option>
-                    <option value="Portuguese" {% if selected_language == 'Portuguese' %}selected{% endif %}>Portuguese</option>
-                    <option value="Russian" {% if selected_language == 'Russian' %}selected{% endif %}>Russian</option>
-                    <option value="Spanish" {% if selected_language == 'Spanish' %}selected{% endif %}>Spanish</option>
-                    <option value="Swedish" {% if selected_language == 'Swedish' %}selected{% endif %}>Swedish</option>
-                    <option value="Turkish" {% if selected_language == 'Turkish' %}selected{% endif %}>Turkish</option>
-                    <option value="Vietnamese" {% if selected_language == 'Vietnamese' %}selected{% endif %}>Vietnamese</option>
-                </select>
+            
+            <!-- Input Text Area -->
+            <div class="form-el-2-anim textarea-container">
+                <textarea name="text_to_translate" id="text_to_translate" rows="5" placeholder="Enter text to translate..." required class="w-full p-3 border rounded-lg focus:outline-none transition-all duration-300">{{ original_text or '' }}</textarea>
+                {% if detected_language %}
+                <p class="text-xs text-gray-500 mt-1">{{ detected_language }}</p>
+                {% endif %}
+            </div>
+            
+            <!-- Mic Button Container -->
+            <div class="text-center form-el-3-anim">
+                <p class="text-xs text-gray-500 mb-2">or</p>
+                <button type="button" id="mic-btn" class="mic-button" title="Translate with voice">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"/><path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z"/></svg>
+                </button>
             </div>
 
             <!-- Translate Button -->
@@ -70,29 +67,99 @@
             </button>
         </form>
 
-        <!-- Result Section -->
+        <!-- Result Section & History... (rest of the file is the same) -->
         <div id="result-container" class="mt-8 result-anim {% if not translation %}hidden{% endif %}">
-            <h3 class="text-lg font-semibold text-gray-800 mb-3">Translation:</h3>
-            <div id="result-box" class="bg-gray-50/70 p-4 border border-gray-200 rounded-lg text-gray-700 whitespace-pre-wrap">
-                {{ translation or '' }}
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-lg font-semibold text-gray-800">Translation:</h3>
+                <button id="copy-btn" class="copy-button" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg><span class="copy-tooltip">Copy</span></button>
+            </div>
+            <div id="result-text" class="bg-gray-50/70 p-4 border border-gray-200 rounded-lg text-gray-700 whitespace-pre-wrap">{{ translation or '' }}</div>
+        </div>
+        {% if history %}
+        <div class="mt-10 result-anim">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">Recent History</h3>
+            <div class="space-y-4">
+                {% for item in history %}<div class="bg-gray-50/70 p-4 border border-gray-200 rounded-lg"><p class="text-xs text-gray-500 mb-1">From {{ item.source }} to {{ item.target }}</p><p class="text-sm text-gray-600 mb-2">"{{ item.original }}"</p><p class="text-sm font-semibold text-teal-800">"{{ item.translation }}"</p></div>{% endfor %}
             </div>
         </div>
+        {% endif %}
     </div>
 
     <script>
-        // JavaScript to handle the loading state
+        // --- Existing Logic ---
         const form = document.getElementById('translator-form');
         const translateBtn = document.getElementById('translate-btn');
         const btnText = document.getElementById('btn-text');
         const loader = document.getElementById('loader');
-
-        form.addEventListener('submit', function() {
-            // Show loader and disable button on form submission
+        form.addEventListener('submit', function() { 
             btnText.textContent = 'Translating...';
             loader.classList.remove('hidden');
             translateBtn.disabled = true;
             translateBtn.classList.add('opacity-75', 'cursor-not-allowed');
         });
+        const copyBtn = document.getElementById('copy-btn');
+        const resultTextElement = document.getElementById('result-text');
+        const tooltip = copyBtn.querySelector('.copy-tooltip');
+        copyBtn.addEventListener('click', function() { 
+            if (resultTextElement && resultTextElement.textContent.trim()) {
+                const textToCopy = resultTextElement.textContent.trim();
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = textToCopy;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                try {
+                    const successful = document.execCommand('copy');
+                    tooltip.textContent = successful ? 'Copied!' : 'Failed!';
+                } catch (err) {
+                    console.error('Fallback: Oops, unable to copy', err);
+                    tooltip.textContent = 'Failed!';
+                }
+                document.body.removeChild(tempTextArea);
+                setTimeout(() => { tooltip.textContent = 'Copy'; }, 2000);
+            }
+        });
+
+        // --- Voice-to-Text Logic ---
+        const micBtn = document.getElementById('mic-btn');
+        const textArea = document.getElementById('text_to_translate');
+
+        // Check for browser support
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            
+            micBtn.addEventListener('click', function() {
+                if (micBtn.classList.contains('is-listening')) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                }
+            });
+
+            recognition.onstart = function() {
+                micBtn.classList.add('is-listening');
+                textArea.placeholder = "Listening...";
+            };
+
+            recognition.onend = function() {
+                micBtn.classList.remove('is-listening');
+                textArea.placeholder = "Enter text or use the mic...";
+            };
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                textArea.value = transcript;
+            };
+
+            recognition.onerror = function(event) {
+                console.error("Speech recognition error:", event.error);
+                textArea.placeholder = "Sorry, speech recognition failed.";
+            };
+
+        } else {
+            console.log("Speech Recognition not supported in this browser.");
+            micBtn.style.display = 'none'; // Hide button if not supported
+        }
     </script>
 
 </body>
