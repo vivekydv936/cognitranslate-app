@@ -7,7 +7,7 @@ Live Demo: https://cognitranslate-app.vercel.app/
 (Suggestion: Consider replacing this static image with a GIF to showcase the UI animations!)
 
 ✨ Features
-CogniTranslate is packed with advanced features designed for a seamless and intuitive user experience:
+CogniTranslate is packed with advanced features designed for a seamless and intuitive user experience:-
 
 🧠 AI-Powered Translations: Leverages the Gemini 1.5 Flash model for high-quality, nuanced translations that understand context and tone.
 
