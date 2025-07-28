@@ -1,29 +1,38 @@
-# app.py (version 7 - Dynamic Language List)
+# app.py (version 8 - Favicon Fix)
 
 import os
-from flask import Flask, render_template, request, session
-from dotenv import load_dotenv
-load_dotenv()
+from flask import Flask, render_template, request, session, make_response
+
 # --- Configure the Flask App ---
 app = Flask(__name__)
 # A secret key is required to use sessions in Flask
 app.secret_key = os.urandom(24)
 
-
 # --- Configure the Gemini API ---
 import google.generativeai as genai
-API_KEY = os.getenv("GOOGLE_API_KEY", "YOUR_API_KEY_HERE") # Make sure your key is here
-genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel('gemini-1.5-flash')
+from dotenv import load_dotenv
+load_dotenv() # Load environment variables from .env file
 
-# --- NEW: Centralized Language List ---
+API_KEY = os.getenv("GOOGLE_API_KEY", "YOUR_API_KEY_HERE")
+if not API_KEY or API_KEY == "YOUR_API_KEY_HERE":
+    print("ERROR: GOOGLE_API_KEY not found in environment variables.")
+else:
+    genai.configure(api_key=API_KEY)
+    model = genai.GenerativeModel('gemini-1.5-flash')
+
+# --- Centralized Language List ---
 LANGUAGES = [
     "Arabic", "Bengali", "Chinese (Simplified)", "Dutch", "English",
     "French", "German", "Hindi", "Indonesian", "Italian", "Japanese",
     "Korean", "Polish", "Portuguese", "Russian", "Spanish", "Swedish",
     "Turkish", "Vietnamese"
 ]
-# ---------------------------------
+
+# --- NEW: Route to handle favicon.ico requests ---
+@app.route('/favicon.ico')
+def favicon():
+    # Return a 204 No Content response
+    return make_response('', 204)
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -41,6 +50,9 @@ def home():
         final_source_language = source_language_form
 
         try:
+            if not API_KEY or API_KEY == "YOUR_API_KEY_HERE":
+                 raise ValueError("API Key is not configured.")
+
             if source_language_form == 'Detect Language':
                 if original_text and original_text.strip():
                     detection_prompt = f"""Detect the language of the following text. Return only the name of the language. Text: "{original_text}" """
@@ -75,7 +87,7 @@ def home():
                                selected_source_language=source_language_form,
                                detected_language=detected_language_display,
                                history=session['history'],
-                               languages=LANGUAGES) # Pass the list
+                               languages=LANGUAGES)
     else:
         # Initial page load
         return render_template('index.html',
@@ -85,7 +97,7 @@ def home():
                                selected_source_language="Detect Language",
                                detected_language="",
                                history=session['history'],
-                               languages=LANGUAGES) # Pass the list
+                               languages=LANGUAGES)
 
 if __name__ == '__main__':
     app.run(debug=True)
