@@ -2,7 +2,8 @@
 
 import os
 from flask import Flask, render_template, request, session
-
+from dotenv import load_dotenv
+load_dotenv()
 # --- Configure the Flask App ---
 app = Flask(__name__)
 # A secret key is required to use sessions in Flask
