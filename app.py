@@ -11,7 +11,7 @@ app.secret_key = os.urandom(24)
 
 # --- Configure the Gemini API ---
 import google.generativeai as genai
-API_KEY = "YOUR_API_KEY_HEREI" # Make sure your key is here
+API_KEY = os.getenv("GOOGLE_API_KEY", "YOUR_API_KEY_HERE") # Make sure your key is here
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-1.5-flash')
 
