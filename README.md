@@ -4,7 +4,9 @@ CogniTranslate is a modern, feature-rich translation service powered by Google's
 
 Live Demo: https://cognitranslate-app.vercel.app/
 
-(Suggestion: Consider replacing this static image with a GIF to showcase the UI animations!)
+<img width="795" height="1030" alt="Image" src="https://github.com/user-attachments/assets/d92492fa-0cc0-4572-baef-b6fcba49e3dd" />
+
+<img width="731" height="1036" alt="Image" src="https://github.com/user-attachments/assets/b34e1b0d-ca42-4ec4-803d-a3e7eb83c8f6" />
 
 ✨ Features
 CogniTranslate is packed with advanced features designed for a seamless and intuitive user experience:-
