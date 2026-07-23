@@ -13,7 +13,7 @@ genai.configure(api_key=API_KEY)
 
 # Initialize the generative model
 # We are using the 'gemini-1.5-flash' model which is fast and powerful
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-3.5-flash')
 
 # --- Let's define our translation task ---
 text_to_translate = "Hello, world! This is a test of my new AI translator."
